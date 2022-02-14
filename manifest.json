@@ -1,0 +1,22 @@
+{
+  "name": "Vodohod",
+  "description": "Плагин для работы с Vodohod",
+  "version": "1.0.2",
+  "manifest_version": 3,
+  "background": {
+    "service_worker": "assets/scripts/background.js"
+  },
+  "permissions": ["storage", "activeTab", "scripting", "cookies"],
+  "host_permissions": ["<all_urls>"],
+  "action": {
+    "default_popup": "assets/html/popup.html",
+    "default_icon": {
+      "32": "assets/icons/32.png",
+      "192": "assets/icons/192.png"
+    }
+  },
+  "icons": {
+    "32": "assets/icons/32.png",
+    "192": "assets/icons/192.png"
+  }
+}
