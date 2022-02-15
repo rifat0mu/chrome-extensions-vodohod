@@ -8,13 +8,13 @@ btHidePanel.addEventListener("click", async () => {
 
     let results = await chrome.scripting.executeScript({
         target: { tabId: tab.id },
-        function: _hidePanel,
+        function: _panelDisplay,
     });
 });
 
 chrome.runtime.onMessage.addListener(
     function(request, sender, sendResponse) {
-        if(request.hidePanel == "none") {
+        if(request.panelDisplay == "none") {
             btHidePanel.innerText = "Показать админ панель";
         } else {
             btHidePanel.innerText = "Скрыть админ панель";
@@ -22,18 +22,33 @@ chrome.runtime.onMessage.addListener(
     }
 );
 
-function _hidePanel() {
-    chrome.storage.sync.get("hidePanel", ({ hidePanel }) => {
-        var panel = document.getElementById("panel");
-        if(hidePanel == 'none') {
-            hidePanel = "block";
+chrome.storage.local.get("panelDisplay", function(data) {
+    if(typeof data.panelDisplay == "undefined") {
+        // That's kind of bad
+    } else {
+        if(data.panelDisplay == "none") {
+            btHidePanel.innerText = "Показать админ панель";
         } else {
-            hidePanel = "none";
+            btHidePanel.innerText = "Скрыть админ панель";
         }
-        panel.style.display = hidePanel;
-        chrome.storage.sync.set({ hidePanel });
+    }
+});
 
-        chrome.runtime.sendMessage({hidePanel: hidePanel});
+
+function _panelDisplay() {
+    chrome.storage.local.get("panelDisplay", function(data) {
+        var dsiplay;
+        var panel = document.getElementById("panel");
+        if(panel) {
+            if(data.panelDisplay == 'none') {
+                dsiplay = "block";
+            } else {
+                dsiplay = "none";
+            }
+            panel.style.display = dsiplay;
+            chrome.storage.local.set({panelDisplay: dsiplay});
+            chrome.runtime.sendMessage({panelDisplay: dsiplay});
+        }
     });
 }
 
